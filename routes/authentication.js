@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/register', async (req, res) => {
     let { username, email, password } = req.body;
-    const hash = bcrypt.hashSync(password, 10);
+    const hash =await bcrypt.hashSync(password, 10);
     const olduser = await userModel.findOne({email})
     if(olduser){
         res.status(401).json({msg:"useralredy exist"})
@@ -35,7 +35,7 @@ router.post('/sigin', async (req, res) => {
     let { uname, password } = req.body
     const user = await userModel.findOne({ email: uname })
     if (user) {
-        bcrypt.compare(password, user.password, function (err, result) {
+       await bcrypt.compare(password, user.password, function (err, result) {
             if (result) {
                 const token = jwt.sign({ id: user._id }, process.env.SECRET)
 res.cookie("token", token, {
