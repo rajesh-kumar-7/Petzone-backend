@@ -21,7 +21,12 @@ router.post('/register', async (req, res) => {
         })
         
         const token = jwt.sign({ id: createdUser._id }, process.env.SECRET)
-        res.cookie("token", token)
+    res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None"
+})
+
         res.json({ msg: "usercreated", user: createdUser })
         
     }
@@ -33,7 +38,12 @@ router.post('/sigin', async (req, res) => {
         bcrypt.compare(password, user.password, function (err, result) {
             if (result) {
                 const token = jwt.sign({ id: user._id }, process.env.SECRET)
-                res.cookie("token", token)
+res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "None"
+})
+
                 res.json({ msg: "valid user", user: user })
             }
             else {
